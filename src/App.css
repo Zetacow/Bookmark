@@ -1,0 +1,218 @@
+.app {
+  min-height: 100vh;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.collection-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+}
+
+.collection-summary div {
+  background: rgba(15, 23, 42, 0.8);
+  padding: 1.25rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.stat {
+  font-size: 2.25rem;
+  margin: 0;
+  font-weight: 600;
+}
+
+.eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #a5b4fc;
+  margin: 0 0 0.5rem;
+}
+
+.subtitle {
+  color: #cbd5f5;
+  margin: 0;
+}
+
+.hint {
+  color: #94a3b8;
+  margin: 0;
+}
+
+.dashboard {
+  background: rgba(9, 9, 19, 0.8);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  box-shadow: 0 25px 80px rgba(15, 23, 42, 0.55);
+}
+
+.dashboard__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
+
+.panel {
+  background: rgba(15, 15, 30, 0.8);
+  padding: 1.5rem;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  margin-bottom: 1.5rem;
+}
+
+.panel__header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.manga-form {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.manga-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+input,
+select,
+button {
+  border-radius: 0.8rem;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  padding: 0.85rem 1rem;
+  background: rgba(15, 23, 42, 0.6);
+  color: #f8fafc;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+button.primary {
+  background: linear-gradient(135deg, #6366f1, #ec4899);
+  border: none;
+  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+  font-weight: 600;
+}
+
+button.ghost,
+.manga-card button {
+  background: transparent;
+  color: #f1f5f9;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.form-error {
+  color: #fecdd3;
+  margin: 0;
+}
+
+.verification {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 0.85rem;
+  background: rgba(15, 118, 110, 0.2);
+  border: 1px solid rgba(45, 212, 191, 0.4);
+}
+
+.manga-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+
+.manga-card {
+  background: rgba(12, 18, 38, 0.9);
+  border-radius: 1.1rem;
+  padding: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.manga-card img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  border-radius: 0.9rem;
+}
+
+.manga-card__actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.login-shell {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-card {
+  max-width: 420px;
+  width: 100%;
+  background: rgba(8, 12, 31, 0.85);
+  padding: 2rem;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  box-shadow: 0 25px 80px rgba(15, 23, 42, 0.65);
+}
+
+.login-card h1 {
+  margin: 0 0 0.35rem;
+}
+
+.login-form {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.login-form label span {
+  font-weight: 500;
+}
+
+.hint strong {
+  color: #e0e7ff;
+}
+
+@media (max-width: 640px) {
+  .app {
+    padding: 1.5rem;
+  }
+
+  .dashboard {
+    padding: 1.25rem;
+  }
+}
