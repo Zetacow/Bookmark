@@ -36,6 +36,7 @@ describe('getDemoUsers', () => {
       {
         username: 'otaku',
         displayName: 'Resident Collector',
+        provider: 'demo',
       },
     ])
   })

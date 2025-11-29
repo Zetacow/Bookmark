@@ -3,6 +3,23 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import App from './App'
 import { searchMangaOnline } from './lib/manga'
+import { buildGoogleUser } from './lib/googleAuth'
+
+vi.mock('@react-oauth/google', () => ({
+  GoogleLogin: ({ onSuccess, onError }) => (
+    <button
+      type="button"
+      onClick={() =>
+        (globalThis.__TEST_GOOGLE_CREDENTIAL__
+          ? onSuccess?.({ credential: globalThis.__TEST_GOOGLE_CREDENTIAL__ })
+          : onError?.())
+      }
+    >
+      Sign in with Google
+    </button>
+  ),
+  GoogleOAuthProvider: ({ children }) => <div>{children}</div>,
+}))
 
 vi.mock('./lib/manga', async () => {
   const actual = await vi.importActual('./lib/manga')
@@ -78,5 +95,45 @@ describe('App integration flow', () => {
 
     await user.clear(filterInput)
     expect(await screen.findByRole('heading', { name: 'Hunter x Hunter' })).toBeInTheDocument()
+  })
+
+  it('supports signing in with Google when credentials decode correctly', async () => {
+    const user = userEvent.setup()
+    const validCredential = (() => {
+      const encode = (payload) =>
+        btoa(JSON.stringify(payload))
+          .replace(/\+/g, '-')
+          .replace(/\//g, '_')
+          .replace(/=+$/g, '')
+      return `${encode({ alg: 'RS256', typ: 'JWT' })}.${encode({
+        sub: '12345',
+        email: 'reader@example.com',
+        name: 'Google Reader',
+      })}.signature`
+    })()
+
+    globalThis.__TEST_GOOGLE_CREDENTIAL__ = validCredential
+    render(<App googleAuthEnabled />)
+
+    await user.click(screen.getByRole('button', { name: /sign in with google/i }))
+
+    expect(buildGoogleUser(validCredential)).toMatchObject({
+      username: 'reader@example.com',
+      displayName: 'Google Reader',
+      provider: 'google',
+      email: 'reader@example.com',
+    })
+    expect(await screen.findByText(/Google account/i)).toBeInTheDocument()
+    expect(screen.getByText(/reader@example.com/)).toBeInTheDocument()
+  })
+
+  it('surfaces errors when Google credentials are invalid', async () => {
+    const user = userEvent.setup()
+    globalThis.__TEST_GOOGLE_CREDENTIAL__ = 'not-a-real-credential'
+    render(<App googleAuthEnabled />)
+
+    await user.click(screen.getByRole('button', { name: /sign in with google/i }))
+
+    expect(await screen.findByText(/could not verify your google login/i)).toBeInTheDocument()
   })
 })

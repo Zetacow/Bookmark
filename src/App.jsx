@@ -3,6 +3,7 @@ import './App.css'
 import LoginForm from './components/LoginForm'
 import MangaDashboard from './components/MangaDashboard'
 import { authenticate } from './lib/auth'
+import { buildGoogleUser } from './lib/googleAuth'
 
 const STORAGE_KEYS = {
   user: 'bookmark_user',
@@ -25,7 +26,7 @@ function readStorage(key, fallback) {
   }
 }
 
-function App() {
+function App({ googleAuthEnabled = false }) {
   const [user, setUser] = useState(() => readStorage(STORAGE_KEYS.user, defaultUser))
   const [mangaList, setMangaList] = useState(() => readStorage(STORAGE_KEYS.manga, defaultManga))
   const [loginError, setLoginError] = useState('')
@@ -60,6 +61,16 @@ function App() {
     setUser(session)
   }
 
+  const handleGoogleCredential = (credential) => {
+    const googleUser = buildGoogleUser(credential)
+    if (!googleUser) {
+      setLoginError('We could not verify your Google login. Please try again.')
+      return
+    }
+    setLoginError('')
+    setUser(googleUser)
+  }
+
   const handleLogout = () => {
     setUser(null)
   }
@@ -75,7 +86,13 @@ function App() {
   if (!user) {
     return (
       <main className="app">
-        <LoginForm onLogin={handleLogin} error={loginError} />
+        <LoginForm
+          onLogin={handleLogin}
+          onGoogleCredential={googleAuthEnabled ? handleGoogleCredential : undefined}
+          onAuthError={setLoginError}
+          error={loginError}
+          googleEnabled={googleAuthEnabled}
+        />
       </main>
     )
   }
