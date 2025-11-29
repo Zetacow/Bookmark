@@ -44,6 +44,10 @@ function MangaDashboard({ user, mangaList, onAddManga, onRemoveManga, onLogout }
         return
       }
 
+      if (verification.isFallback) {
+        setError('Using cached data while Jikan is unavailable. Please retry later for the latest info.')
+      }
+
       const entry = buildMangaEntry(verification, formState.status)
       onAddManga(entry)
       setLastVerification({
