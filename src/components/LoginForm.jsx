@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
+import GoogleLoginButton from './GoogleLoginButton'
 
 const initialState = {
   username: '',
   password: '',
 }
 
-function LoginForm({ onLogin, error }) {
+function LoginForm({ onLogin, onGoogleCredential, onAuthError, error, googleEnabled }) {
   const [formData, setFormData] = useState(initialState)
 
   const handleChange = (event) => {
@@ -59,6 +60,24 @@ function LoginForm({ onLogin, error }) {
           <button type="submit" className="primary">Login</button>
         </form>
 
+        {googleEnabled ? (
+          <div className="federated-section">
+            <div className="divider">
+              <span>or continue with</span>
+            </div>
+            {onGoogleCredential ? (
+              <GoogleLoginButton
+                onCredential={onGoogleCredential}
+                onError={(message) => onAuthError?.(message)}
+              />
+            ) : (
+              <p className="hint">Google Sign-In is unavailable in this build.</p>
+            )}
+          </div>
+        ) : (
+          <p className="hint">Google Sign-In is disabled (no client ID configured).</p>
+        )}
+
         <footer>
           <p className="hint">
             Demo account: <strong>otaku / manga123</strong>
@@ -71,7 +90,10 @@ function LoginForm({ onLogin, error }) {
 
 LoginForm.propTypes = {
   onLogin: PropTypes.func.isRequired,
+  onGoogleCredential: PropTypes.func,
+  onAuthError: PropTypes.func,
   error: PropTypes.string,
+  googleEnabled: PropTypes.bool,
 }
 
 export default LoginForm

@@ -63,9 +63,18 @@ function MangaDashboard({ user, mangaList, onAddManga, onRemoveManga, onLogout }
   return (
     <div className="dashboard">
       <header className="dashboard__header">
-        <div>
+        <div className="user-meta">
           <p className="eyebrow">Signed in as</p>
-          <h2>{user.displayName}</h2>
+          <div className="user-identity">
+            {user.avatar && <img src={user.avatar} alt="Profile avatar" className="avatar" />}
+            <div>
+              <h2>{user.displayName}</h2>
+              <p className="hint">
+                {user.provider === 'google' ? 'Google account' : 'Demo account'}
+                {user.email ? ` · ${user.email}` : ''}
+              </p>
+            </div>
+          </div>
           <p className="hint">Keep your collection synced with live data from MyAnimeList.</p>
         </div>
         <button type="button" onClick={onLogout} className="ghost">
@@ -170,6 +179,9 @@ MangaDashboard.propTypes = {
   user: PropTypes.shape({
     username: PropTypes.string.isRequired,
     displayName: PropTypes.string.isRequired,
+    provider: PropTypes.string,
+    email: PropTypes.string,
+    avatar: PropTypes.string,
   }).isRequired,
   mangaList: PropTypes.arrayOf(
     PropTypes.shape({

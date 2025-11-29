@@ -3,6 +3,7 @@ const demoUsers = Object.freeze([
     username: 'otaku',
     password: 'manga123',
     displayName: 'Resident Collector',
+    provider: 'demo',
   }),
 ])
 
@@ -25,6 +26,7 @@ export function authenticate(username, password) {
   if (match && match.password === password) {
     const safeUser = { ...match }
     delete safeUser.password
+    safeUser.provider = safeUser.provider || 'demo'
     return safeUser
   }
   return null
